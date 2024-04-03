@@ -10,6 +10,9 @@
                         Año
                     </th>
                     <th class="px-6 py-3">
+                        Código Desarrolladora
+                    </th>
+                    <th class="px-6 py-3">
                         Nombre Desarrolladora
                     </th>
                 </tr>
@@ -17,13 +20,16 @@
             <tbody>
                 <tr class="bg-white border-b">
                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ $videojuegos->titulo }}
+                        {{ $videojuego->titulo }}
                     </td>
                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ $videojuegos->anyo }}
+                        {{ $videojuego->anyo }}
                     </td>
                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ $videojuegos->desarrolladora->nombre }}
+                        {{ $videojuego->desarrolladora->id }}
+                    </td>
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {{ $videojuego->desarrolladora->nombre }}
                     </td>
                 </tr>
             </tbody>
