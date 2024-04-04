@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Videojuego;
+use Illuminate\Support\Facades\Auth;
 
 class VideojuegoController extends Controller
 {
@@ -16,8 +17,14 @@ class VideojuegoController extends Controller
      */
     public function index()
     {
+        $id_usuario_log = Auth::id();
+
+        $videojuegos = Videojuego::whereHas('usuarios', function($query) use ($id_usuario_log) {
+            $query->where('user_id', $id_usuario_log);
+        })->get();
+
         return view('videojuegos.index', [
-            'videojuegos' => Videojuego::all(),
+            'videojuegos' => $videojuegos,
         ]);
     }
 
@@ -45,6 +52,9 @@ class VideojuegoController extends Controller
         $videojuego->anyo = $validated['anyo'];
         $videojuego->desarrolladora_id = $validated['desarrolladora_id'];
         $videojuego->save();
+
+        $videojuego->usuarios()->attach(Auth::id());    //id del usuario identificado
+
         session()->flash('success', 'El videojuego se ha creado correctamente.');
         return redirect()->route('videojuegos.index');
 
@@ -92,6 +102,9 @@ class VideojuegoController extends Controller
      */
     public function destroy(Videojuego $videojuego)
     {
+        $videojuego->usuarios()->detach();  //te borra la relación de lo que borras de la tabla posesiones
+
+
         $videojuego->delete();
         session()->flash('success', 'El videojuego se ha eliminado correctamente.');
         return redirect()->route('videojuegos.index');
