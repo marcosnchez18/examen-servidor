@@ -13,6 +13,9 @@
                         Nombre Desarrolladora
                     </th>
                     <th  class="px-6 py-3">
+                        Nombre Distribuidora
+                    </th>
+                    <th  class="px-6 py-3">
                         Editar
                     </th>
                     <th  class="px-6 py-3">
@@ -34,6 +37,9 @@
                         </th>
                         <th  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             {{ $videojuego->desarrolladora->nombre }}
+                        </th>
+                        <th  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{ $videojuego->desarrolladora->distribuidora->nombre }}
                         </th>
                         <td class="px-6 py-4">
                             <a href="{{ route('videojuegos.edit', ['videojuego' => $videojuego]) }}" class="font-medium text-blue-600 hover:underline">
