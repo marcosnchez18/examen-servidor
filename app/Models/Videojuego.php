@@ -12,11 +12,18 @@ class Videojuego extends Model
 
     public function usuarios()
     {
-   	 return $this->belongsToMany(User::class, 'posesiones');
+        return $this->belongsToMany(User::class, 'posesiones');
     }
 
     public function desarrolladora(): BelongsTo
     {
-   	 return $this->belongsTo(Desarrolladora::class);
+        return $this->belongsTo(Desarrolladora::class);
+    }
+
+    public function es_par_impar()
+    {
+        return $this->id % 2 == 0 ? 'par' : 'impar';
     }
 }
+
+// $videojuego = Videojuego::find($id);

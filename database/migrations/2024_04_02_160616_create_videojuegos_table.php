@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('titulo');
-            $table->integer('anyo');
+            $table->year('anyo');
             $table->foreignId('desarrolladora_id')->constrained();
         });
     }

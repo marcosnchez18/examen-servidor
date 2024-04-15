@@ -20,11 +20,20 @@
                 <x-input-error :messages="$errors->get('anyo')" class="mt-2" />
             </div>
 
-            <div>
-                <x-input-label for="desarrolladora_id" :value="'Desarrolladora del videojuego'" />
-                <x-text-input id="desarrolladora_id" class="block mt-1 w-full"
-                    type="text" name="desarrolladora_id" :value="old('desarrolladora_id')" required
-                    autofocus autocomplete="desarrolladora_id" />
+            <!-- Desarrolladora -->
+            <div class="mt-4">
+                <x-input-label for="desarrolladora_id" :value="'Desarrolladora del artículo'" />
+                <select id="desarrolladora_id"
+                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                    name="desarrolladora_id">
+                    @foreach ($desarrolladoras as $desarrolladora)
+                        <option value="{{ $desarrolladora->id }}"
+                            {{ old('desarrolladora_id') == $desarrolladora->id ? 'selected' : '' }}
+                            >
+                            {{ $desarrolladora->nombre }}
+                        </option>
+                    @endforeach
+                </select>
                 <x-input-error :messages="$errors->get('desarrolladora_id')" class="mt-2" />
             </div>
 

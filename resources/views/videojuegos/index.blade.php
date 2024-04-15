@@ -7,13 +7,22 @@
                         Titulo
                     </th>
                     <th  class="px-6 py-3">
-                        Año
+                        ID par/impar
                     </th>
-                    <th  class="px-6 py-3">
-                        Nombre Desarrolladora
+                    <th scope="col" class="px-6 py-3">
+                        <a href="{{ route('videojuegos.index', ['order' => 'anyo', 'order_dir' => order_dir($order == 'anyo', $order_dir)]) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                            Año {{ order_dir_arrow($order == 'anyo', $order_dir) }}
+                        </a>
                     </th>
-                    <th  class="px-6 py-3">
-                        Nombre Distribuidora
+                    <th scope="col" class="px-6 py-3">
+                        <a href="{{ route('videojuegos.index', ['order' => 'desarrolladoras.nombre', 'order_dir' => order_dir($order == 'desarrolladoras.nombre', $order_dir)]) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                            Desarrolladora {{ order_dir_arrow($order == 'desarrolladoras.nombre', $order_dir) }}
+                        </a>
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <a href="{{ route('videojuegos.index', ['order' => 'distribuidoras.nombre', 'order_dir' => order_dir($order == 'distribuidoras.nombre', $order_dir)]) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                            Distribuidora {{ order_dir_arrow($order == 'distribuidoras.nombre', $order_dir) }}
+                        </a>
                     </th>
                     <th  class="px-6 py-3">
                         Editar
@@ -31,6 +40,9 @@
                             <a href="{{ route('videojuegos.show', ['videojuego' => $videojuego]) }}" class="text-blue-500">
                                 {{ $videojuego->titulo }}
                             </a>
+                        </th>
+                        <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            Tipo: {{ $videojuego->es_par_impar() }}, ID: {{ $videojuego->id }}
                         </th>
                         <th  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             {{ $videojuego->anyo }}

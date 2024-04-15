@@ -22,6 +22,23 @@
                 <x-input-error :messages="$errors->get('anyo')" class="mt-2" />
             </div>
 
+            <!-- Desarrolladora -->
+            <div class="mt-4">
+                <x-input-label for="desarrolladora_id" :value="'Desarrolladora del artículo'" />
+                <select id="desarrolladora_id"
+                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                    name="desarrolladora_id">
+                    @foreach ($desarrolladoras as $desarrolladora)
+                        <option value="{{ $desarrolladora->id }}"
+                            {{ old('desarrolladora_id', $videojuego->desarrolladora_id) == $desarrolladora->id ? 'selected' : '' }}
+                            >
+                            {{ $desarrolladora->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('desarrolladora_id')" class="mt-2" />
+            </div>
+
             <div class="flex items-center justify-end mt-4">
                 <a href="{{ route('videojuegos.index') }}">
                     <x-secondary-button class="ms-4">

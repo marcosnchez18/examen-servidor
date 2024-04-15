@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Desarrolladora;
 use Illuminate\Http\Request;
 use App\Models\Videojuego;
 use Illuminate\Support\Facades\Auth;
@@ -15,25 +16,34 @@ class VideojuegoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $id_usuario_log = Auth::id();
-
-        $videojuegos = Videojuego::whereHas('usuarios', function($query) use ($id_usuario_log) {
-            $query->where('user_id', $id_usuario_log);
-        })->get();
+        $order = $request->query('order', 'desarrolladoras.nombre');
+        $order_dir = $request->query('order_dir', 'asc');
+        $videojuegos = Auth::user()->videojuegos()
+            ->with(['desarrolladora', 'desarrolladora.distribuidora'])
+            ->selectRaw('videojuegos.*')
+            ->leftJoin('desarrolladoras', 'videojuegos.desarrolladora_id', '=', 'desarrolladoras.id')
+            ->leftJoin('distribuidoras', 'desarrolladoras.distribuidora_id', '=', 'distribuidoras.id')
+            ->orderBy($order, $order_dir)
+            ->get();
 
         return view('videojuegos.index', [
             'videojuegos' => $videojuegos,
+            'order' => $order,
+            'order_dir' => $order_dir,
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('videojuegos.create');
+        return view('videojuegos.create', [
+            'desarrolladoras' => Desarrolladora::all(),
+        ]);
     }
 
     /**
@@ -44,7 +54,7 @@ class VideojuegoController extends Controller
         $validated = $request->validate([
             'titulo' => 'required|max:255',
             'anyo' => 'required|integer',
-            'desarrolladora_id' => 'required|integer',
+            'desarrolladora_id' => 'required|exists:desarrolladoras,id',
         ]);
 
         $videojuego = new Videojuego();
@@ -77,6 +87,7 @@ class VideojuegoController extends Controller
     {
         return view('videojuegos.edit', [
             'videojuego' => $videojuego,
+            'desarrolladoras' => Desarrolladora::all(),
         ]);
     }
 
@@ -87,13 +98,13 @@ class VideojuegoController extends Controller
     {
         $validated = $request->validate([
             'titulo' => 'required|max:255',
-            'anyo' => 'required|integer',
+            'anyo' => 'required|digits:4',
+            'desarrolladora_id' => 'required|exists:desarrolladoras,id',
         ]);
-
         $videojuego->titulo = $validated['titulo'];
         $videojuego->anyo = $validated['anyo'];
+        $videojuego->desarrolladora_id = $validated['desarrolladora_id'];
         $videojuego->save();
-        session()->flash('success', 'El videojuego se ha creado correctamente.');
         return redirect()->route('videojuegos.index');
     }
 
@@ -102,9 +113,7 @@ class VideojuegoController extends Controller
      */
     public function destroy(Videojuego $videojuego)
     {
-        $videojuego->usuarios()->detach();  //te borra la relación de lo que borras de la tabla posesiones
-
-
+        $videojuego->usuarios()->detach();
         $videojuego->delete();
         session()->flash('success', 'El videojuego se ha eliminado correctamente.');
         return redirect()->route('videojuegos.index');
