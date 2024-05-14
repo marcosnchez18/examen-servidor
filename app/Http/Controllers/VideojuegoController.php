@@ -6,6 +6,7 @@ use App\Models\Desarrolladora;
 use Illuminate\Http\Request;
 use App\Models\Videojuego;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class VideojuegoController extends Controller
 {
@@ -53,7 +54,7 @@ class VideojuegoController extends Controller
     {
         $validated = $request->validate([
             'titulo' => 'required|max:255',
-            'anyo' => 'required|integer',
+            'anyo' => 'required|digits:4',
             'desarrolladora_id' => 'required|exists:desarrolladoras,id',
         ]);
 
@@ -85,6 +86,10 @@ class VideojuegoController extends Controller
      */
     public function edit(Videojuego $videojuego)
     {
+
+        if (!Gate::allows('update-videojuego', $videojuego)) {
+             abort(403);
+        }
         return view('videojuegos.edit', [
             'videojuego' => $videojuego,
             'desarrolladoras' => Desarrolladora::all(),
@@ -96,6 +101,11 @@ class VideojuegoController extends Controller
      */
     public function update(Request $request, Videojuego $videojuego)
     {
+
+        if (!Gate::allows('update-videojuego', $videojuego)) {
+            abort(403);
+       }
+
         $validated = $request->validate([
             'titulo' => 'required|max:255',
             'anyo' => 'required|digits:4',
